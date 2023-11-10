@@ -3,7 +3,11 @@
   "Testing": false,
   "ScheduledForDeletion": false,
   "InstalledFromUrl": "",
+<<<<<<< HEAD
   "WorkingPluginId": "fff1ff52-6360-4425-9918-db72220d8011",
+=======
+  "WorkingPluginId": "1506116b-d1c3-4a20-ab1b-04442c2a7bd8",
+>>>>>>> 6de589a96f0399781d75e7a2e00a16542a48d54d
   "IsThirdParty": false,
   "EffectiveVersion": "0.23.11.3",
   "Author": "AE",
