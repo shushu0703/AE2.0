@@ -147,6 +147,16 @@
             动态目标 实时计算的目标 需要设置回调
             </summary>
         </member>
+        <member name="M:Common.IModule.OnUpdate">
+            <summary>
+            游戏里每帧触发
+            </summary>
+        </member>
+        <member name="M:Common.IModule.OnDrawUI">
+            <summary>
+            每次UI刷新触发
+            </summary>
+        </member>
         <member name="P:Common.IEntry.Name">
             <summary>
             显示的插件名
@@ -299,12 +309,6 @@
             从世界标准时间戳解析时间信息
             </summary>
         </member>
-        <member name="M:Common.Helper.TimeHelper.GetNetworkTime">
-            <summary>
-            从NTP服务器获取时间
-            </summary>
-            <returns>DateTime</returns>
-        </member>
         <member name="M:Common.Helper.TimeHelper.GetWebDateTime">
             <summary>
             获取网页时间
@@ -388,6 +392,13 @@
             </summary>
             <param name="spells"></param>
         </member>
+        <member name="M:Common.IMemApiBlueMage.AssignBlueMageActionToSlot(System.Int32,System.UInt32)">
+            <summary>
+            设置单个技能
+            </summary>
+            <param name="slot">插槽位置</param>
+            <param name="actionId">技能id</param>
+        </member>
         <member name="M:Common.IMemApiBuff.GetAuraTimeleft(Common.Define.CharacterAgent,System.UInt32,System.Boolean)">
             <summary>
             获取buff剩余时间,毫秒
@@ -400,6 +411,12 @@
         <member name="M:Common.IMemApiBuff.IsPotted">
             <summary>
             是否有强化药状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Common.IMemApiCondition.InDutyRecorderPlayback">
+            <summary>
+            任务回顾中
             </summary>
             <returns></returns>
         </member>
@@ -528,10 +545,41 @@
             </summary>
             <param name="pos"></param>
         </member>
+        <member name="M:Common.IMemApiNavigation.RayCast(System.UInt32,System.Numerics.Vector3@,System.Numerics.Vector3@,System.Numerics.Vector3@)">
+            <summary>
+            射线追踪
+            </summary>
+            <param name="territoryId">地图id</param>
+            <param name="origin">射线起始点</param>
+            <param name="direction">方向</param>
+            <param name="hit">命中点</param>
+            <returns></returns>
+        </member>
         <member name="T:Common.IMemApiSpell">
             <summary>
             技能相关的一些api
             </summary>
+        </member>
+        <member name="M:Common.IMemApiSpell.GetRecastTime(System.UInt32)">
+            <summary>
+            复唱时间
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.IMemApiSpell.GetRecastTimeElapsed(System.UInt32)">
+            <summary>
+            复唱经过时间
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.IMemApiSpell.GetCooldown(System.UInt32)">
+            <summary>
+            冷却CD
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="M:Common.IMemApiSpell.GetLastComboSpellId">
             <summary>
@@ -540,12 +588,13 @@
             </summary>
             <returns>技能ID</returns>
         </member>
-        <member name="M:Common.IMemApiSpell.IsReady(System.UInt32)">
+        <member name="M:Common.IMemApiSpell.PreCheck(System.UInt32)">
             <summary>
-            简单判断技能是否解锁和蓝量是否足够技能使用。
+            框架底层专用，不要在ACR中使用此方法
+            实现：等级检查、蓝量检查
             </summary>
-            <param name="id">技能id</param>
-            <returns>返回true如果技能准备好了，否则false</returns>
+            <param name="actionid"></param>
+            <returns></returns>
         </member>
         <member name="M:Common.IMemApiSpell.GetActionRange(System.UInt32)">
             <summary>
@@ -621,6 +670,24 @@
             <param name="spellId"></param>
             <returns></returns>
         </member>
+        <member name="M:Common.IMemApiSpell.CanCastEx(System.UInt32,System.Nullable{System.Int64},System.Int64)">
+            <summary>
+            确认技能能否能用
+            不检测距离
+            </summary>
+            <param name="actionId">技能id</param>
+            <param name="targetId">目标id</param>
+            <param name="recastTimeLeft">技能cd剩多少秒视为可用</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.IMemApiSpell.CheckActionInRangeOrLoS(System.UInt32,System.Nullable{System.Int64})">
+            <summary>
+            检测距离
+            </summary>
+            <param name="actionId">技能id</param>
+            <param name="targetId">目标id</param>
+            <returns></returns>
+        </member>
         <member name="T:Common.IMemApiSummoner">
             <summary>
             召唤量谱相关api
@@ -678,92 +745,24 @@
             不死鸟附体状态
             </summary>
         </member>
+        <member name="M:Common.IMemApiTarget.CanAttack(Common.Define.CharacterAgent,System.Int64)">
+            <summary>
+            ActionManager.CanUseActionOnTarget
+            </summary>
+        </member>
         <member name="M:Common.IMemApiZoneInfo.InDeepDungeon">
             <summary>
             是否在正统优雷卡
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Common.IMemOmen.CreateOmen(Common.Omen.Type.OmenType,System.Numerics.Vector3,System.Single,System.Numerics.Vector3)">
+        <member name="M:Common.IMemoryAPITeleport.Teleport(System.UInt32,System.Numerics.Vector3)">
             <summary>
-            
+            选择最靠近目标位置的传说点传送
             </summary>
-            <param name="type"></param>
-            <param name="pos"></param>
-            <param name="rot"></param>
-            <param name="scale">缩放比例</param>
+            <param name="territoryId">区域</param>
+            <param name="pos">地点</param>
             <returns></returns>
-        </member>
-        <member name="M:Common.IMemOmen.RotationMattrix(System.Single*,System.Single)">
-            <summary>
-            
-            </summary>
-            <param name="mix4x4">in out </param>
-            <param name="rot"></param>
-        </member>
-        <member name="M:Common.Omen.Omen.BindingRot(Common.Define.CharacterAgent,System.Single)">
-            <summary>
-            绑定面向为目标的面向
-            </summary>
-            <param name="character">目标</param>
-            <param name="offset">逆时针旋转角度</param>
-            <returns></returns>
-        </member>
-        <member name="T:Common.Omen.OmenManager">
-            <summary>
-            Omen管理类
-            
-            </summary>
-        </member>
-        <member name="M:Common.Omen.OmenManager.ForceClear">
-            <summary>
-            危险 
-            </summary>
-        </member>
-        <member name="M:Common.Omen.OmenManager.CreateRect(System.String,System.Single,System.Single,System.Single,System.Numerics.Vector3)">
-            <summary>
-            创建一个矩形 从pos向rot方向延伸
-            </summary>
-            <param name="name">自定义名字</param>
-            <param name="rot">方向</param>
-            <param name="width">宽度（左右方向）</param>
-            <param name="length">长度（前后）</param>
-            <param name="pos">起始地点</param>
-            <returns></returns>
-        </member>
-        <member name="T:Common.Omen.OmenRing">
-            <summary>
-            可以创建圆 扇形 圆环
-            </summary>
-        </member>
-        <member name="M:Common.Omen.OmenRing.CreatRingForWidth(System.String,System.Numerics.Vector3,System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            通过外圈半径、圆环宽度和角度创建一个圆、扇形、圆环或者扇形圆环
-            </summary>
-            <param name="name"></param>
-            <param name="pos"></param>
-            <param name="rot"></param>
-            <param name="angle">圆环角度</param>
-            <param name="width">圆环宽度</param>
-            <param name="radius">外圈半径</param>
-            <returns></returns>
-        </member>
-        <member name="M:Common.Omen.OmenRing.CreatRingForRadius(System.String,System.Numerics.Vector3,System.Single,System.Single,System.Single,System.Single)">
-            <summary>
-            通过内圈半径、外圈半径和角度创建一个圆、扇形、圆环或者扇形圆环
-            </summary>
-            <param name="name">自定义名称</param>
-            <param name="pos">初始地点</param>
-            <param name="rot">面向</param>
-            <param name="angle">圆环角度</param>
-            <param name="radius1">内圈半径</param>
-            <param name="radius2">外圈半径</param>
-            <returns></returns>
-        </member>
-        <member name="F:Common.Omen.Other.Rings">
-            <summary>
-            (omenid,(r1,r2))
-            </summary>
         </member>
         <member name="T:MiscUtil.IO.ReverseLineReader">
             <summary>
